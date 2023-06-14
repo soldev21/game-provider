@@ -1,0 +1,68 @@
+version: '3'
+
+services:
+
+  postgres:
+    container_name: postgres-game-provider
+    image: postgres:14.2
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=game_provider
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/data/db
+
+  mongo:
+    container_name: mongo-game-provider
+    image: mongo:latest
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin1234!
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./workspace:/workspace
+      - mongo_data:/data/db
+
+  mongo-express:
+    image: mongo-express
+    container_name: mongo-express-gp
+    restart: always
+    ports:
+      - "28081:8081"
+    environment:
+      ME_CONFIG_MONGODB_SERVER: mongo
+      ME_CONFIG_BASICAUTH_USERNAME: catalog
+      ME_CONFIG_BASICAUTH_PASSWORD: 123456
+      ME_CONFIG_MONGODB_ADMINUSERNAME: admin
+      ME_CONFIG_MONGODB_ADMINPASSWORD: admin1234!
+      ME_CONFIG_MONGODB_URL: mongo://mongo:27017/
+    depends_on:
+      - mongo
+
+
+  redis:
+    container_name: redis-game-provider
+    image: redis:6.2-alpine
+    restart: always
+    command: redis-server --save 20 1 --loglevel warning --requirepass 123456
+    ports:
+      - 6379:6379
+    volumes:
+      - cache:/data
+
+  redisinsight:
+    image: redislabs/redisinsight:latest
+    ports:
+      - '8001:8001'
+    volumes:
+      - cache:/redislabs
+
+volumes:
+  postgres_data:
+  mongo_data:
+  cache:
+    driver: local

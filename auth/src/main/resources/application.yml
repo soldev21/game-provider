@@ -1,0 +1,61 @@
+quarkus:
+  cache:
+    enabled: true
+    caffeine:
+      platform-client:
+        metrics-enabled: true
+        initial-capacity: 10
+        expire-after-access: 5s
+  redis:
+    hosts: redis://localhost:6379
+    password: 123456
+  http:
+    auth:
+      proactive: false
+    cors: false
+  rest-client:
+    verify-host: false
+  swagger-ui:
+    enable: true
+    always-include: true
+    title: 'Game Provider'
+    path: api
+  smallrye-openapi:
+    info-title: 'Example API'
+    store-schema-directory: target
+  banner:
+    path: ascii-art
+  native:
+    resources:
+      includes: publicKey.pem
+  smallrye-jwt:
+    enabled: true
+
+smallrye:
+  jwt:
+    sign:
+      key:
+        location: privateKey.pem
+
+mp:
+  jwt:
+    verify:
+      publickey:
+        location: publicKey.pem
+        issuer: https://www.megafair.com
+
+disable:
+  authorization: false
+
+gp:
+  cache:
+    tokenTtl: 1h
+    sessionTokenTtl: 1h
+
+#  openapi:
+#    extensions:
+#      smallrye:
+#        info:
+#          title: 'Game Provider API'
+#          version: 1.0
+#          description: 'Som desc'
