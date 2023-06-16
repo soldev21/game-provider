@@ -1,12 +1,10 @@
 package com.megafair.controller;
 
 import com.megafair.model.SessionTokenRequest;
-import com.megafair.security.jwt.PrincipalWrapper;
 import com.megafair.service.AuthService;
 import io.smallrye.mutiny.Uni;
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
-import jakarta.inject.Inject;
 import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -18,24 +16,22 @@ import org.jboss.resteasy.reactive.RestQuery;
 import java.util.UUID;
 
 import static com.megafair.auth.Roles.PLATFORM;
+import static com.megafair.util.MonoUtil.wrapResponseOk;
 
 
 @Path("/auth")
-@Tag(name = "Auth services")
+@Tag(name = "Authentication Module Endpoints")
 @RequiredArgsConstructor
 public class AuthController {
 
     private final AuthService authService;
-    @Inject
-    PrincipalWrapper principalWrapper;
 
     @GET
     @Path("/token")
     @Produces(MediaType.TEXT_PLAIN)
     @PermitAll
     public Uni<Response> getToken(@RestQuery("id") @NotNull UUID id, @RestQuery("secret") @NotNull String secret) {
-        return authService.getToken(id, secret)
-            .map(data -> Response.ok().entity(data).build());
+        return wrapResponseOk(authService.getToken(id, secret));
     }
 
     @POST
@@ -44,22 +40,13 @@ public class AuthController {
     @Consumes(MediaType.APPLICATION_JSON)
     @RolesAllowed(PLATFORM)
     public Uni<Response> getSessionToken(SessionTokenRequest sessionTokenRequest) {
-        return authService.getSessionToken(sessionTokenRequest)
-            .map(data -> Response.ok().entity(data).build());
+        return wrapResponseOk(authService.getSessionToken(sessionTokenRequest));
     }
 
     @PUT
     @Path("/invalidateSession")
     @RolesAllowed(PLATFORM)
     public Uni<Response> invalidate(@RestQuery("sessionToken") String sessionToken) {
-        return authService.invalidateSessionToken(sessionToken)
-            .map(data -> Response.ok().entity(data).build());
-    }
-
-    @GET
-    @Path("/test")
-    @RolesAllowed(PLATFORM)
-    public Response test() {
-        return Response.ok(principalWrapper.getPlatformId()).build();
+        return wrapResponseOk(authService.invalidateSessionToken(sessionToken));
     }
 }

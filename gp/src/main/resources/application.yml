@@ -8,8 +8,16 @@ quarkus:
         expire-after-access: 5s
   redis:
     hosts: redis://localhost:6379
+    password: 123456
   http:
     cors: true
+    auth:
+      permission:
+        bearer:
+          paths: /*
+          policy: authenticated
+          auth-mechanism: bearer
+      proactive: true
   rest-client:
     verify-host: false
   swagger-ui:
@@ -51,5 +59,5 @@ disable:
 
 gp:
   cache:
-    tokenTtl: 5m
-    sessionTokenTtl: 5m
+    tokenTtl: 100m
+    sessionTokenTtl: 10000000h

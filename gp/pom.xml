@@ -9,7 +9,6 @@
     </parent>
 
     <artifactId>gp</artifactId>
-    <version>1</version>
 
     <profiles>
         <profile>
@@ -18,12 +17,12 @@
                 <dependency>
                     <groupId>com.megafair</groupId>
                     <artifactId>auth</artifactId>
-                    <version>1</version>
+                    <version>${project.version}</version>
                 </dependency>
                 <dependency>
                     <groupId>com.megafair</groupId>
                     <artifactId>game</artifactId>
-                    <version>1</version>
+                    <version>${project.version}</version>
                 </dependency>
             </dependencies>
         </profile>
@@ -33,7 +32,7 @@
                 <dependency>
                     <groupId>com.megafair</groupId>
                     <artifactId>auth</artifactId>
-                    <version>1</version>
+                    <version>${project.version}</version>
                 </dependency>
             </dependencies>
         </profile>
@@ -43,7 +42,7 @@
                 <dependency>
                     <groupId>com.megafair</groupId>
                     <artifactId>game</artifactId>
-                    <version>1</version>
+                    <version>${project.version}</version>
                 </dependency>
             </dependencies>
         </profile>

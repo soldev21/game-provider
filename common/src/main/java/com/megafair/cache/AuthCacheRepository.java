@@ -74,7 +74,7 @@ public abstract class AuthCacheRepository<V> {
     }
 
     public Uni<Boolean> expire(String id, Duration duration) {
-        return keyCommands.expire(id, duration);
+        return duration.isZero() ? Uni.createFrom().item(false) : keyCommands.expire(id, duration);
     }
 
     private String id(String id, String prefix) {

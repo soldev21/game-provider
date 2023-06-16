@@ -9,5 +9,4 @@
     </parent>
 
     <artifactId>common</artifactId>
-    <version>1</version>
 </project>

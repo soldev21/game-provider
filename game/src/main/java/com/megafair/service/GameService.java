@@ -6,12 +6,14 @@ import com.megafair.cache.StringCacheRepository;
 import com.megafair.model.AccountOperationRequest;
 import com.megafair.model.AccountOperationResponse;
 import io.smallrye.jwt.auth.principal.JWTParser;
+import io.smallrye.jwt.auth.principal.ParseException;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
-import org.eclipse.microprofile.jwt.Claims;
 import org.eclipse.microprofile.jwt.JsonWebToken;
+
+import static com.megafair.util.MonoUtil.invalidSessionTokenException;
+import static com.megafair.util.MonoUtil.unsupportedOperationException;
 
 @ApplicationScoped
 @RequiredArgsConstructor
@@ -20,22 +22,26 @@ public class GameService {
     private final JWTParser jwtParser;
     private final StringCacheRepository stringCacheRepository;
 
-    @SneakyThrows
     public Uni<Boolean> checkSessionToken(String sessionToken) {
-        JsonWebToken jwt = jwtParser.parse(sessionToken);
-        if (!jwt.getGroups().contains(Roles.GAME)) {
-            return Uni.createFrom().item(false);
+        JsonWebToken jwt;
+        try {
+            jwt = jwtParser.parse(sessionToken);
+        } catch (ParseException e) {
+            return invalidSessionTokenException();
         }
-        return stringCacheRepository.existInTheSet(AuthCachePrefix.SESSION_TOKENS.name(), jwt.getRawToken());
+        if (!jwt.getGroups().contains(Roles.GAME)) {
+            return invalidSessionTokenException();
+        }
+        return stringCacheRepository.existInTheSet(AuthCachePrefix.SESSION_TOKENS.getName(), jwt.getRawToken());
     }
 
-    public AccountOperationResponse requestForAmount(AccountOperationRequest accountOperationRequest, String token) {
+    public Uni<AccountOperationResponse> requestForAmount(AccountOperationRequest accountOperationRequest, String token) {
         checkSessionToken(token);
-        return new AccountOperationResponse();
+        return unsupportedOperationException();
     }
 
-    public AccountOperationResponse depositOnAccount(AccountOperationRequest accountOperationRequest, String token) {
+    public Uni<AccountOperationResponse> depositOnAccount(AccountOperationRequest accountOperationRequest, String token) {
         checkSessionToken(token);
-        return new AccountOperationResponse();
+        return unsupportedOperationException();
     }
 }
