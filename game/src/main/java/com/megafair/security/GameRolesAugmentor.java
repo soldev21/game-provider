@@ -1,6 +1,6 @@
 package com.megafair.security;
 
-import com.megafair.service.AuthService;
+import com.megafair.service.GameService;
 import io.quarkus.security.UnauthorizedException;
 import io.quarkus.security.identity.AuthenticationRequestContext;
 import io.quarkus.security.identity.SecurityIdentity;
@@ -8,18 +8,17 @@ import io.quarkus.security.identity.SecurityIdentityAugmentor;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
-import org.eclipse.microprofile.jwt.Claims;
 import org.eclipse.microprofile.jwt.JsonWebToken;
 
 import java.security.Principal;
 
-import static com.megafair.auth.Roles.PLATFORM;
+import static com.megafair.security.Roles.GAME;
 
 @ApplicationScoped
 @RequiredArgsConstructor
-public class RolesAugmentor implements SecurityIdentityAugmentor {
+public class GameRolesAugmentor implements SecurityIdentityAugmentor {
 
-    private final AuthService authService;
+    final GameService gameService;
 
     @Override
     public Uni<SecurityIdentity> augment(SecurityIdentity identity, AuthenticationRequestContext context) {
@@ -27,10 +26,10 @@ public class RolesAugmentor implements SecurityIdentityAugmentor {
     }
 
     private Uni<SecurityIdentity> build(SecurityIdentity identity) {
-        if (identity.getRoles().contains(PLATFORM)) {
+        if (identity.getRoles().contains(GAME)) {
             Principal principal = identity.getPrincipal();
             if (principal instanceof JsonWebToken jwt) {
-                return authService.checkToken(jwt.getClaim(Claims.azp), jwt.getRawToken())
+                return gameService.checkSessionToken(jwt.getRawToken())
                     .flatMap(b -> {
                         if (b) {
                             return Uni.createFrom().item(identity);
@@ -41,5 +40,10 @@ public class RolesAugmentor implements SecurityIdentityAugmentor {
             }
         }
         return Uni.createFrom().item(identity);
+    }
+
+    @Override
+    public int priority() {
+        return 0;
     }
 }

@@ -3,7 +3,6 @@ package com.megafair.controller;
 import com.megafair.model.AccountOperationRequest;
 import com.megafair.service.GameService;
 import io.smallrye.mutiny.Uni;
-import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.Consumes;
@@ -16,6 +15,7 @@ import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import org.jboss.resteasy.reactive.RestHeader;
 import org.jboss.resteasy.reactive.RestQuery;
 
+import static com.megafair.security.Roles.GAME;
 import static com.megafair.util.MonoUtil.wrapResponseOk;
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
@@ -26,11 +26,11 @@ import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 @Tag(name = "Game Module Endpoints")
 public class GameController {
 
-    private final GameService gameService;
+    final GameService gameService;
 
     @PUT
     @Path("/requestForAmount")
-    @RolesAllowed("game")
+    @RolesAllowed(GAME)
     public Uni<Response> requestForAmount(
         @Valid
         AccountOperationRequest accountOperationRequest,
@@ -43,7 +43,7 @@ public class GameController {
 
     @PUT
     @Path("/depositOnAccount")
-    @RolesAllowed("game")
+    @RolesAllowed(GAME)
     public Uni<Response> depositOnAccount(
         @Valid
         AccountOperationRequest accountOperationRequest,
@@ -56,10 +56,9 @@ public class GameController {
 
     @PUT
     @Path("/checkSessionToken")
-    @PermitAll
+    @RolesAllowed(GAME)
     public Uni<Response> checkSessionToken(
-        @RestQuery("sessionToken") String sessionToken
     ) {
-        return wrapResponseOk(gameService.checkSessionToken(sessionToken));
+        return wrapResponseOk(Uni.createFrom().voidItem());
     }
 }

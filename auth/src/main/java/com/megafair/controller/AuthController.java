@@ -15,7 +15,7 @@ import org.jboss.resteasy.reactive.RestQuery;
 
 import java.util.UUID;
 
-import static com.megafair.auth.Roles.PLATFORM;
+import static com.megafair.security.Roles.PLATFORM;
 import static com.megafair.util.MonoUtil.wrapResponseOk;
 
 

@@ -1,4 +1,4 @@
-package com.megafair.auth;
+package com.megafair.security;
 
 import io.quarkus.security.spi.runtime.AuthorizationController;
 import jakarta.annotation.Priority;

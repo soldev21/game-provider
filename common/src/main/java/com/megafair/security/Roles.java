@@ -1,4 +1,4 @@
-package com.megafair.auth;
+package com.megafair.security;
 
 public class Roles {
     public static final String PLATFORM = "platform";

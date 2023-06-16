@@ -1,4 +1,4 @@
-package com.megafair.auth;
+package com.megafair.security;
 
 import io.vertx.ext.web.Router;
 import jakarta.enterprise.context.ApplicationScoped;

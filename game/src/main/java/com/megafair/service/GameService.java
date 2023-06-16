@@ -1,10 +1,10 @@
 package com.megafair.service;
 
-import com.megafair.auth.Roles;
 import com.megafair.cache.AuthCachePrefix;
 import com.megafair.cache.StringCacheRepository;
 import com.megafair.model.AccountOperationRequest;
 import com.megafair.model.AccountOperationResponse;
+import com.megafair.security.Roles;
 import io.smallrye.jwt.auth.principal.JWTParser;
 import io.smallrye.jwt.auth.principal.ParseException;
 import io.smallrye.mutiny.Uni;
@@ -19,8 +19,8 @@ import static com.megafair.util.MonoUtil.unsupportedOperationException;
 @RequiredArgsConstructor
 public class GameService {
 
-    private final JWTParser jwtParser;
-    private final StringCacheRepository stringCacheRepository;
+    final JWTParser jwtParser;
+    final StringCacheRepository stringCacheRepository;
 
     public Uni<Boolean> checkSessionToken(String sessionToken) {
         JsonWebToken jwt;

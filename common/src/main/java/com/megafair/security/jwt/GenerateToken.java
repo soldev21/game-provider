@@ -10,8 +10,8 @@ import java.time.Duration;
 import java.util.Arrays;
 import java.util.HashSet;
 
-import static com.megafair.auth.Roles.GAME;
-import static com.megafair.auth.Roles.PLATFORM;
+import static com.megafair.security.Roles.GAME;
+import static com.megafair.security.Roles.PLATFORM;
 
 
 public class GenerateToken {

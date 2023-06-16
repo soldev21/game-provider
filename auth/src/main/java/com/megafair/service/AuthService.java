@@ -1,6 +1,5 @@
 package com.megafair.service;
 
-import com.megafair.auth.Roles;
 import com.megafair.cache.AuthCachePrefix;
 import com.megafair.cache.GameCacheRepository;
 import com.megafair.cache.RedisKeyHasher;
@@ -10,6 +9,7 @@ import com.megafair.model.Response;
 import com.megafair.model.SessionTokenRequest;
 import com.megafair.model.SessionTokenResponse;
 import com.megafair.properties.CacheProperties;
+import com.megafair.security.Roles;
 import com.megafair.security.jwt.GenerateToken;
 import com.megafair.security.jwt.PrincipalWrapper;
 import io.quarkus.security.UnauthorizedException;
